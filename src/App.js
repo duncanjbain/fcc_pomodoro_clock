@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Moment from 'react-moment';
+import useInterval from './useInterval'
 
 
 
@@ -51,7 +52,22 @@ const App = () => {
       }
     }
 
+    useEffect(() => {
+      if(time === 0 && mode === 'session') {
+        SetMode('break')
+        SetTime(breakLength * 60 * 1000)
+      } else if (time === 0 && mode === 'break') {
+        SetMode('session')
+        SetTime(sessionLength * 60 * 1000)
+      }
 
+    },[time,breakLength,sessionLength,mode])
+
+    useEffect(() => {
+      SetTime(sessionLength * 60 * 1000)
+    }, [sessionLength])
+
+    useInterval(() => SetTime(time - 1000), active ? 1000 : null)
 
   return (
 
@@ -63,15 +79,15 @@ const App = () => {
       </header>
       <div className="row bg-light justify-content-center text-center">
         <div className="col">
-          <h2>{mode}</h2>
-          <h2>Time Remaining</h2>
+          <h2>{mode === 'session' ? 'Session' : 'Break'}</h2>
+          <h2><Moment format="mm:ss">{time}</ Moment></h2>
         </div>
       </div>
       <div className="row text-center">
         <div className="col align-middle">
           <h2>Session Length</h2>
           <button className="btn btn-outline-primary" onClick={HandleSessionIncrement}>+</button>
-          <p><Moment format="mm:ss">{time}</Moment></p>
+          <p>{sessionLength}</p>
           <button className="btn btn-outline-primary" onClick={HandleSessionDecrement}>-</button>
         </div>
         <div className="col">
