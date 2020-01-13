@@ -82,6 +82,7 @@ const App = () => {
         return null;
       } else {
         SetBreakLength(breakLength-1);
+        SetTime(time - (60*1000));
       }
     }
 
@@ -90,6 +91,7 @@ const App = () => {
         return null;
       } else {
         SetBreakLength(breakLength+1);
+        SetTime(time + (60*1000));
       }
     }
 
@@ -98,6 +100,7 @@ const App = () => {
         return null;
       } else {
         SetSessionLength(sessionLength-1);
+        SetTime(time + (60-1000));
       }
     }
 
@@ -106,6 +109,7 @@ const App = () => {
         return null;
       } else {
         SetSessionLength(sessionLength+1);
+        SetTime(time + (60*1000));
       }
     }
 
