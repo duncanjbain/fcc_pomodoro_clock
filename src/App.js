@@ -100,7 +100,7 @@ const App = () => {
         return null;
       } else {
         SetSessionLength(sessionLength-1);
-        SetTime(time + (60-1000));
+        SetTime(time + (60*1000));
       }
     }
 
