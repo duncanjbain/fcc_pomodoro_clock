@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import useInterval from './useInterval'
+import {useInterval} from './useInterval'
 import ReactFCCtest from 'react-fcctest';
 import beep_file from './BeepSound.wav'
 
@@ -11,6 +11,8 @@ const App = () => {
     const [active, SetActive] = useState(false);
     const [mode, SetMode] = useState('session');
     const beep = useRef();
+
+
 
 
     // https://gist.github.com/asabaylus/866265/1bc8159a43a91d87b09b42bcf07fcb5a4a28e7af
@@ -45,6 +47,7 @@ const App = () => {
   return clock.join(":")
   }
 
+  useInterval(() => SetTime(time - 1000), active ? 1000 : null)
 
   useEffect(() => {
     SetTime(sessionLength * 60 * 1000)
@@ -65,17 +68,17 @@ const App = () => {
 
 
     const HandleReset = () => {
+      beep.current.pause()
+      beep.current.currentTime = 0
       SetSessionLength(25);
       SetBreakLength(5);
       SetActive(false);
       SetMode('session');
       SetTime(25 * 60 * 1000)
-      beep.current.pause()
-      beep.current.currentTime = 0
     }
 
     const HandleBreakDecrement = () => {
-      if(breakLength <=1 ) {
+      if(breakLength === 1 ) {
         return null;
       } else {
         SetBreakLength(breakLength-1);
@@ -91,7 +94,7 @@ const App = () => {
     }
 
     const HandleSessionDecrement = () => {
-      if(sessionLength <=1 ) {
+      if(sessionLength === 1 ) {
         return null;
       } else {
         SetSessionLength(sessionLength-1);
@@ -99,15 +102,15 @@ const App = () => {
     }
 
     const HandleSessionIncrement = () => {
-      if(sessionLength<60) {
-        SetSessionLength(sessionLength+1);
+      if(sessionLength>=60) {
+        return null;
       } else {
-        return null
+        SetSessionLength(sessionLength+1);
       }
     }
 
 
-    useInterval(() => SetTime(time - 1000), active ? 1000 : null)
+
 
   return (
 
@@ -122,7 +125,7 @@ const App = () => {
       <div className="row bg-light justify-content-center text-center">
         <div className="col">
           <h2 id="timer-label">{mode === 'session' ? 'Session' : 'Break'}</h2>
-          <h2 id="time-left"> {convertMilliseconds(time, "mm:ss")}</h2>
+          <h2 id="time-left">{convertMilliseconds(time, "mm:ss")}</h2>
         </div>
       </div>
       <div className="row text-center">
